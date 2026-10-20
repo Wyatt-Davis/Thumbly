@@ -1,0 +1,39 @@
+name: Bug report
+description: Something in Thumbly did not work the way you expected.
+title: "Bug: "
+body:
+  - type: markdown
+    attributes:
+      value: |
+        You do not need to be a developer to fill this in. Write what you saw, in your own words.
+  - type: textarea
+    id: what-happened
+    attributes:
+      label: What happened?
+      description: What were you trying to do, and what did Thumbly do instead?
+    validations:
+      required: true
+  - type: textarea
+    id: steps
+    attributes:
+      label: How can someone else see it?
+      description: If you remember the steps, list them. A public video link helps when one thumbnail is the problem.
+      placeholder: |
+        1. Open Thumbly
+        2. Paste this link
+        3. Click Download
+  - type: input
+    id: browser
+    attributes:
+      label: Browser and device
+      description: For example, Chrome on Windows, or Safari on an iPhone.
+      placeholder: Chrome on Windows
+  - type: dropdown
+    id: where
+    attributes:
+      label: Where were you using Thumbly?
+      options:
+        - The website (wyatt-davis.github.io/Thumbly)
+        - A downloaded HTML file
+        - src/index.html from this repository
+        - Not sure
