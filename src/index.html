@@ -1,0 +1,180 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Thumbly</title>
+  <meta name="description" content="Crop and download YouTube thumbnails in your browser. Paste a link, frame the shot, and save a JPEG. Nothing you paste is uploaded.">
+  <meta name="author" content="Wyatt Davis">
+  <meta name="theme-color" content="#0a0a0a">
+  <link rel="canonical" href="https://wyatt-davis.github.io/Thumbly/">
+  <link rel="icon" href="../assets/favicon.ico" sizes="any">
+  <link rel="icon" type="image/png" href="../assets/favicon-32.png" sizes="32x32">
+  <link rel="icon" type="image/png" href="../assets/icon-192.png" sizes="192x192">
+  <link rel="apple-touch-icon" href="../assets/apple-touch-icon.png">
+  <link rel="manifest" href="../manifest.webmanifest">
+  <meta property="og:type" content="website">
+  <meta property="og:site_name" content="Thumbly">
+  <meta property="og:title" content="Thumbly">
+  <meta property="og:description" content="Crop and download YouTube thumbnails in your browser. Nothing is uploaded.">
+  <meta property="og:url" content="https://wyatt-davis.github.io/Thumbly/">
+  <meta property="og:image" content="https://wyatt-davis.github.io/Thumbly/assets/og.png">
+  <meta property="og:image:width" content="1200">
+  <meta property="og:image:height" content="630">
+  <meta property="og:image:alt" content="Thumbly, a browser tool for cropping and downloading YouTube thumbnails">
+  <meta name="twitter:card" content="summary_large_image">
+  <meta name="twitter:title" content="Thumbly">
+  <meta name="twitter:description" content="Crop and download YouTube thumbnails in your browser. Nothing is uploaded.">
+  <meta name="twitter:image" content="https://wyatt-davis.github.io/Thumbly/assets/og.png">
+  <meta name="twitter:image:alt" content="Thumbly, a browser tool for cropping and downloading YouTube thumbnails">
+  <link href="https://fonts.googleapis.com/css2?family=Quicksand:wght@400;500;600&display=swap" rel="stylesheet">
+  <!-- JSZip 3.10.1 (MIT or GPLv3; used here under the MIT license). Vendored so batch download works offline. See THIRD_PARTY_NOTICES.md. -->
+  <script src="vendor/jszip.min.js"></script>
+  <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+  <div class="container">
+    <header class="header">
+      <h1>THUMBLY</h1>
+      <div class="header-actions">
+        <button type="button" id="themeBtn" class="icon-btn" title="Switch to light mode" aria-label="Switch to light mode">
+          <svg class="icon-moon" xmlns="http://www.w3.org/2000/svg" width="12" height="12" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" focusable="false">
+            <path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z" />
+          </svg>
+          <svg class="icon-sun" xmlns="http://www.w3.org/2000/svg" width="12" height="12" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2.75" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" focusable="false">
+            <circle cx="12" cy="12" r="5" />
+            <path d="M12 1v1.5M12 21.5V23M1 12h1.5M21.5 12H23M4.22 4.22l1.06 1.06M18.72 18.72l1.06 1.06M4.22 19.78l1.06-1.06M18.72 5.28l1.06-1.06" />
+          </svg>
+        </button>
+        <button type="button" id="menuBtn" class="icon-btn" title="Menu" aria-label="Menu" aria-expanded="false" aria-controls="menuDropdown">
+          <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" focusable="false">
+            <path d="M4 6h16" />
+            <path d="M4 12h16" />
+            <path d="M4 18h16" />
+          </svg>
+        </button>
+      </div>
+      <div id="menuDropdown">
+        <button class="menu-item" id="aspectRatioItem">Aspect Ratio: <span id="aspectLabel">1:1</span></button>
+        <button class="menu-item" id="exportSizeItem">Export Size: <span id="sizeLabel">1280×1280</span></button>
+        <button class="menu-item" id="downloadHTMLItem">Download HTML</button>
+        <button class="menu-item" id="filenameItem">Filename: <span id="filenameLabel">{title}</span></button>
+        <div class="shortcuts-section">
+          <div class="shortcuts-header">Keybinds</div>
+          <div class="shortcut-line">
+            <span class="shortcut-text">Download</span>
+            <span class="key">Enter</span>
+          </div>
+          <div class="shortcut-line">
+            <span class="shortcut-text">Re-center</span>
+            <span class="key">R</span>
+          </div>
+          <div class="shortcut-line">
+            <span class="shortcut-text">Clear</span>
+            <span class="key">C</span>
+          </div>
+          <div class="shortcut-line">
+            <span class="shortcut-text">Batch download</span>
+            <span class="key">B</span>
+          </div>
+        </div>
+      </div>
+    </header>
+    <main class="main">
+      <div class="input-wrapper">
+        <div class="input-label">
+          <label for="urlInput" id="urlLabel">[LINK]</label>
+          <div class="input-actions">
+            <button id="batchBtn">Batch</button>
+            <button id="clearBtn">Clear</button>
+          </div>
+        </div>
+        <input type="text" id="urlInput" placeholder="Paste YouTube link here..." autocomplete="off" autofocus>
+      </div>
+      <div id="previewArea">
+        <div class="thumbnail-label">
+          [THUMBNAIL]
+          <button id="recenterBtn">Re-center</button>
+        </div>
+        <div id="imageBox" class="image-box">
+          <div id="loading" class="loading" style="display:none;">Loading thumbnail...</div>
+          <svg id="placeholder" class="placeholder-icon" xmlns="http://www.w3.org/2000/svg" width="60" height="60" fill="none" viewBox="0 0 24 24" stroke="#666666" stroke-width="1.8">
+            <path stroke-linecap="round" stroke-linejoin="round" d="M4 16l4.586-4.586a2 2 0 012.828 0L16 16V4a2 2 0 01-2-2H6a2 2 0 01-2 2v12z"></path>
+            <path stroke-linecap="round" stroke-linejoin="round" d="M14 8a2 2 0 100-4 2 2 0 000 4z"></path>
+          </svg>
+          <div id="invalidMessage">[Invalid Link]</div>
+          <img id="thumbnailImg" src="" alt="">
+          <div id="cropSquare" class="crop-square"></div>
+        </div>
+        <button id="downloadBtn">Download</button>
+      </div>
+      <section id="recentSection" class="recent" aria-labelledby="recentHeading" hidden>
+        <div class="thumbnail-label">
+          <h2 class="recent-heading" id="recentHeading">[RECENT]</h2>
+          <button id="clearRecentBtn" type="button" aria-label="Clear all recent videos">Clear all</button>
+        </div>
+        <ul id="recentList" class="recent-list"></ul>
+      </section>
+    </main>
+    <footer class="footer">
+      Wyatt Davis &copy; 2026
+    </footer>
+  </div>
+  <!-- Batch Modal -->
+  <div id="batchModal" class="modal">
+    <div class="modal-content" role="dialog" aria-modal="true" aria-labelledby="batchTitle" aria-describedby="batchDesc">
+      <button id="closeBatchModal" title="Close" aria-label="Close batch download">×</button>
+      <div class="modal-header">
+        <div class="modal-title">
+          <h2 id="batchTitle">Batch Download</h2>
+          <button id="clearBatchBtn">Clear</button>
+        </div>
+      </div>
+      <p id="batchDesc">One YouTube link per line. Each thumbnail will be center-cropped to 1:1 and saved at 1280×1280.</p>
+   
+      <!-- Batch-only settings chips -->
+      <div class="batch-settings" id="batchSettings">
+        <button type="button" class="setting-chip" id="batchAspectChip">
+          Aspect Ratio: <span id="batchAspectLabel">1:1</span>
+        </button>
+        <button type="button" class="setting-chip" id="batchSizeChip">
+          Export Size: <span id="batchSizeLabel">1280×1280</span>
+        </button>
+      </div>
+   
+      <label for="batchInput" class="sr-only">YouTube links, one per line</label>
+      <textarea id="batchInput" placeholder="Paste YouTube links here (one per line)..."></textarea>
+      <button id="processBatchBtn">Download</button>
+      <div id="batchStatus" role="status" aria-live="polite"></div>
+    </div>
+  </div>
+  <!-- Filename template dialog -->
+  <div id="filenameModal" class="modal">
+    <div class="modal-content" role="dialog" aria-modal="true" aria-labelledby="filenameTitle" aria-describedby="filenameDesc">
+      <button id="closeFilenameModal" class="modal-close" title="Close" aria-label="Close filename template">×</button>
+      <div class="modal-header">
+        <div class="modal-title">
+          <h2 id="filenameTitle">Filename Template</h2>
+        </div>
+      </div>
+      <p id="filenameDesc">Used for single and batch downloads. Tokens: {title} {channel} {date} {aspect}. If the title can't be looked up, {title} falls back to the video ID.</p>
+      <label for="filenameTemplateInput" class="sr-only">Filename template</label>
+      <input type="text" id="filenameTemplateInput" autocomplete="off" spellcheck="false">
+      <div class="token-row" role="group" aria-label="Insert token">
+        <button type="button" class="setting-chip" data-token="title">{title}</button>
+        <button type="button" class="setting-chip" data-token="channel">{channel}</button>
+        <button type="button" class="setting-chip" data-token="date">{date}</button>
+        <button type="button" class="setting-chip" data-token="aspect">{aspect}</button>
+      </div>
+      <div class="filename-preview-line">Example: <span id="filenamePreview" aria-live="polite"></span></div>
+      <div id="filenameWarning" aria-live="polite"></div>
+      <div class="dialog-actions">
+        <button type="button" class="dialog-btn" id="filenameResetBtn">Reset to default</button>
+        <button type="button" class="dialog-btn" id="filenameCancelBtn">Cancel</button>
+        <button type="button" class="dialog-btn primary" id="filenameSaveBtn">Save</button>
+      </div>
+    </div>
+  </div>
+  <script src="app.js"></script>
+</body>
+</html>
