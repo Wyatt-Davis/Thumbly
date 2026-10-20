@@ -56,11 +56,9 @@ The sun/moon button switches between dark and light.
 
 ### One file, no install
 
-- On the site, open the menu and choose **Download HTML**, then open `Thumbly.html`.
-- Or download [thumbly.html from the v1.0.0 release](https://github.com/Wyatt-Davis/Thumbly/releases/download/v1.0.0/thumbly.html) and open it.
-- Or save [`index.html`](index.html) from this repository (**Raw**, then **Save as**) and open it.
+[Download thumbly.html](https://github.com/Wyatt-Davis/Thumbly/releases/latest/download/thumbly.html)
 
-Fetching a thumbnail needs a network connection. A lone downloaded HTML file still runs if the favicon files are not beside it.
+Open it in a browser.
 
 ## Keyboard shortcuts
 
