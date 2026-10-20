@@ -18,6 +18,11 @@ function read(rel) {
   return readFileSync(join(root, rel), 'utf8');
 }
 
+function pngDataUri(rel) {
+  const bytes = readFileSync(join(root, rel));
+  return `data:image/png;base64,${bytes.toString('base64')}`;
+}
+
 /** Re-indent source so the published page matches the original line padding. */
 function indentBlock(text, spaces) {
   const pad = ' '.repeat(spaces);
@@ -40,8 +45,25 @@ export function buildHtml() {
   const jszip = read('src/vendor/jszip.min.js');
 
   // The split page lives in src/, so its icons point at ../assets/.
-  // The published page lives at the site root.
+  // The published page lives at the site root. Favicons are inlined so a
+  // downloaded copy of this file still shows the icon without assets/.
   html = html.replaceAll('../assets/', 'assets/');
+
+  const icon32 = pngDataUri('assets/favicon-32.png');
+  const appleIcon = pngDataUri('assets/apple-touch-icon.png');
+  html = replaceOnce(
+    html,
+    [
+      '  <link rel="icon" href="assets/favicon.ico" sizes="any">',
+      '  <link rel="icon" type="image/png" href="assets/favicon-32.png" sizes="32x32">',
+      '  <link rel="apple-touch-icon" href="assets/apple-touch-icon.png">',
+    ].join('\n'),
+    [
+      `  <link rel="icon" type="image/png" href="${icon32}" sizes="32x32">`,
+      `  <link rel="apple-touch-icon" href="${appleIcon}">`,
+    ].join('\n'),
+    'favicon links',
+  );
 
   html = replaceOnce(
     html,
@@ -82,6 +104,15 @@ export function buildHtml() {
     html.includes('src="vendor/jszip.min.js"')
   ) {
     throw new Error('Build left a src/ reference in index.html.');
+  }
+  if (html.includes('assets/favicon') || html.includes('assets/apple-touch-icon')) {
+    throw new Error('Build left a relative favicon link in index.html.');
+  }
+  if (!html.includes('data:image/png;base64,')) {
+    throw new Error('Build did not inline the favicon.');
+  }
+  if (!html.includes('property="og:image" content="https://wyatt-davis.github.io/Thumbly/assets/og.png"')) {
+    throw new Error('og:image must stay an absolute URL.');
   }
   if (!html.endsWith('\n')) html += '\n';
   return html;
