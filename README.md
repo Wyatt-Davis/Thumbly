@@ -5,7 +5,7 @@
 <h1 align="center">Thumbly</h1>
 
 <p align="center">
-  Crop and download YouTube thumbnails in your browser.
+  Crop and download YouTube thumbnails right in your browser.
 </p>
 
 <p align="center">
@@ -17,7 +17,7 @@
   <a href="https://wyatt-davis.github.io/Thumbly/"><strong>Open the live app</strong></a>
 </p>
 
-Paste a YouTube link. Thumbly loads the best thumbnail it can find, lets you frame a crop, and saves a JPEG. There is no account and no upload.
+Paste a YouTube link. Thumbly loads the best thumbnail it can find, lets you frame a crop, and saves a JPEG.
 
 <table>
   <tr>
@@ -78,7 +78,7 @@ Single-letter shortcuts are ignored while you are typing, while a dialog is open
 
 ## Privacy
 
-Thumbly runs in your browser. It has no server and no account.
+Thumbly runs in your browser. It has no server.
 
 - Thumbnail images come from YouTube (`img.youtube.com` and `i.ytimg.com`).
 - The title and channel name come from [noembed.com](https://noembed.com/).
