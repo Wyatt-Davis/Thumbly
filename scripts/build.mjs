@@ -42,7 +42,6 @@ export function buildHtml() {
   // The split page lives in src/, so its icons point at ../assets/.
   // The published page lives at the site root.
   html = html.replaceAll('../assets/', 'assets/');
-  html = html.replaceAll('../manifest.webmanifest', 'manifest.webmanifest');
 
   html = replaceOnce(
     html,
@@ -77,7 +76,7 @@ export function buildHtml() {
   // page's own asset links must be rewritten; do not scan the script for "../".
   if (
     html.includes('../assets/') ||
-    html.includes('../manifest.webmanifest') ||
+    html.includes('rel="manifest"') ||
     html.includes('href="styles.css"') ||
     html.includes('src="app.js"') ||
     html.includes('src="vendor/jszip.min.js"')

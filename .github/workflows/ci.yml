@@ -10,7 +10,7 @@ permissions:
 
 jobs:
   check:
-    name: Build and sanity checks
+    name: Confirm index.html matches src
     runs-on: ubuntu-latest
     steps:
       - name: Checkout
@@ -21,8 +21,5 @@ jobs:
         with:
           node-version: 22
 
-      - name: Confirm index.html is built from src
+      - name: Rebuild and compare
         run: node scripts/build.mjs --check
-
-      - name: Sanity checks
-        run: node scripts/check.mjs

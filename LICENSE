@@ -19,3 +19,11 @@ AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
 LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
 OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 SOFTWARE.
+
+## Third-party software
+
+This project includes JSZip 3.10.1 (https://github.com/Stuk/jszip) in
+src/vendor/jszip.min.js. JSZip is dual-licensed under the MIT license and
+GPLv3; Thumbly uses it under the MIT license. That copy includes pako
+(https://github.com/nodeca/pako), which is MIT licensed. The license banner
+at the top of the vendored file is the notice shipped with JSZip.

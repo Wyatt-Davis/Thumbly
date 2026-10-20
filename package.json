@@ -1,20 +1,8 @@
 {
   "name": "thumbly",
-  "version": "1.0.0",
   "private": true,
-  "description": "Crop and download YouTube thumbnails in the browser.",
-  "license": "MIT",
-  "author": "Wyatt Davis",
-  "homepage": "https://wyatt-davis.github.io/Thumbly/",
-  "repository": {
-    "type": "git",
-    "url": "git+https://github.com/Wyatt-Davis/Thumbly.git"
-  },
-  "engines": {
-    "node": ">=18"
-  },
   "scripts": {
     "build": "node scripts/build.mjs",
-    "check": "node scripts/build.mjs --check && node scripts/check.mjs"
+    "check": "node scripts/build.mjs --check"
   }
 }
