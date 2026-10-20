@@ -62,21 +62,6 @@ The sun/moon button switches between dark and light.
 
 Fetching a thumbnail needs a network connection. A lone downloaded HTML file still runs if the favicon files are not beside it.
 
-### From a clone
-
-```bash
-git clone https://github.com/Wyatt-Davis/Thumbly.git
-cd Thumbly
-```
-
-Open `src/index.html` in a browser. It is the same app, split into HTML, CSS, and JavaScript.
-
-## Batch download
-
-Click **Batch**, or press `B`. Paste one link per line and click **Download**.
-
-Each picture is center-cropped with the shape and size shown in that window. Duplicate links are skipped. The zip is named `thumbly-batch-1x1-1280x1280.zip`, with the ratio and size filled in. Original exports are named `thumbly-batch-original.zip`.
-
 ## Keyboard shortcuts
 
 Single-letter shortcuts are ignored while you are typing, while a dialog is open, or while Ctrl, Cmd, or Alt is held.
@@ -91,19 +76,6 @@ Single-letter shortcuts are ignored while you are typing, while a dialog is open
 | C | Clear the link and the preview. |
 | Tab | Move through an open dialog. Shift+Tab moves backward. |
 
-## Filename templates
-
-The default name is the video title. The menu's **Filename** item edits the pattern used for single downloads and batch downloads.
-
-| Token | Replaced with |
-| --- | --- |
-| `{title}` | The video title, or the video ID if the title cannot be looked up. |
-| `{channel}` | The channel name, or nothing if the lookup fails. |
-| `{date}` | Today's date on your computer, as `YYYY-MM-DD`. |
-| `{aspect}` | `1x1`, `16x9`, `9x16`, or `original`. |
-
-`{channel} {title} {aspect}` is a valid pattern. The result is turned into a safe file name. Saved patterns that still contain `{id}` or `{size}` have those tokens removed on load. Any other `{token}` is ignored, and the dialog says so.
-
 ## Privacy
 
 Thumbly runs in your browser. It has no server and no account.
@@ -114,40 +86,6 @@ Thumbly runs in your browser. It has no server and no account.
 - A recent entry stores the video ID, title, ratio, crop position, and a thumbnail URL.
 
 YouTube and noembed see those requests. If storage is blocked, the page still runs and forgets settings when you leave.
-
-## Browser support
-
-Current Chrome, Edge, Firefox, and Safari. The website is the easy way to use it on a phone. Saving a file, and opening a downloaded HTML file, is more reliable on a computer.
-
-## Project structure
-
-```
-index.html              Single-file app. This is what GitHub Pages serves.
-src/index.html          Same app, split into files. Open this one directly too.
-src/styles.css
-src/app.js
-src/vendor/jszip.min.js JSZip 3.10.1
-assets/                 Favicons and the social preview image.
-scripts/build.mjs       Inlines src/ into index.html.
-docs/screenshots/       Images used above.
-```
-
-`src/` is the source. Paths are relative, so the site works at `/Thumbly/` on GitHub Pages. Both copies use plain `<script>` tags, so they open from disk as well as from the site.
-
-## Development
-
-Node.js 18 or newer. Nothing to install.
-
-```bash
-node scripts/build.mjs          # write index.html
-node scripts/build.mjs --check  # fail if index.html is out of date
-```
-
-Edit the files in `src/`, rebuild, and commit `index.html` with the change. CI runs the check on every push to `main` and on pull requests.
-
-## Contributing
-
-Open an issue or a pull request.
 
 ## License
 
